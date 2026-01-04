@@ -105,10 +105,7 @@ export default function DayPage() {
                 <h3 className="text-lg font-semibold">Learn <span className="text-slate-500 font-normal">(15m)</span></h3>
                 </div>
                 <p className="mt-2 text-slate-700">{plan.learn.goal}</p>
-
-                <ul className="mt-4 list-disc pl-5 text-slate-700 space-y-2">
-                {renderNestedBullets(plan.learn.items)}
-                </ul>
+                {renderSteps(plan.learn.items)}
 
                 {plan.learn.resources?.length ? (
                 <div className="mt-5">
@@ -288,7 +285,6 @@ function renderNestedBullets(items: string[]) {
 
 
 function renderInlineCode(text: string) {
-  // Split by `code` segments and render code nicely
   const parts = text.split(/(`[^`]+`)/g);
 
   return parts.map((part, i) => {
@@ -307,28 +303,58 @@ function renderInlineCode(text: string) {
   });
 }
 
+
 function renderSteps(items: string[]) {
+  type Group = { raw: string; step?: string; text: string; sub: string[] };
+
+  const groups: Group[] = [];
+
+  for (const raw of items) {
+    const isSub = raw.startsWith("  - ") || raw.startsWith("- ");
+    if (isSub) {
+      const cleaned = raw.replace(/^(\s{0,2}-\s)/, "");
+      if (!groups.length) {
+        groups.push({ raw: "", text: "", sub: [cleaned] });
+      } else {
+        groups[groups.length - 1].sub.push(cleaned);
+      }
+      continue;
+    }
+
+    const m = raw.match(/^(\d+)\)\s*(.*)$/);
+    const step = m?.[1];
+    const text = m?.[2] ?? raw;
+
+    groups.push({ raw, step, text, sub: [] });
+  }
+
   return (
     <ul className="mt-4 space-y-3">
-      {items.map((raw) => {
-        const m = raw.match(/^(\d+)\)\s*(.*)$/); // "1) blah"
-        const step = m?.[1];
-        const rest = m?.[2] ?? raw;
-
-        return (
-          <li key={raw} className="flex gap-3 leading-relaxed text-slate-700">
-            {step ? (
+      {groups.map((g, idx) => (
+        <li key={`${idx}-${g.raw}`} className="text-slate-700">
+          <div className="flex gap-3 leading-relaxed">
+            {g.step ? (
               <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                {step}
+                {g.step}
               </span>
             ) : (
               <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-slate-300" />
             )}
 
-            <span>{renderInlineCode(rest)}</span>
-          </li>
-        );
-      })}
+            <span className="flex-1">{renderInlineCode(g.text)}</span>
+          </div>
+
+          {g.sub.length > 0 ? (
+            <ul className="mt-2 ml-9 list-disc pl-5 space-y-1 text-slate-700">
+              {g.sub.map((s) => (
+                <li key={s} className="leading-relaxed">
+                  {renderInlineCode(s)}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </li>
+      ))}
     </ul>
   );
 }

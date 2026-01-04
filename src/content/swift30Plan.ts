@@ -32,50 +32,84 @@ const defaultLogPrompts = [
 export const swift30IntensivePlan: DayPlan[] = [
   // Days 1–5: Swift fundamentals (move fast)
   {
-    day: 1,
-    phase: "Days 1–5: Swift fundamentals",
-    focus: "Swift basics",
-    learn: {
-        goal: "Understand the SwiftUI building blocks used in Day 1 (View, VStack, Text, Button, @State, functions, reusable components) so you can edit the quiz confidently.",
-        items: [
-        "Where (Swift Playgrounds): New App → open `ContentView.swift` (this is the main screen).",
-        "SwiftUI idea: A `View` is a screen made from smaller UI pieces (Text, Button, stacks).",
-        "Layout: `VStack(spacing:)` stacks UI vertically. Try changing spacing from 16 → 24 and re-run.",
-        "Text: `Text(\"...\")` shows words. Modifiers like `.font(.title2)` and `.fontWeight(.bold)` change style.",
-        "State: `@State` stores values that can change (like score/feedback). When a @State changes, the UI updates automatically.",
-        "Buttons: `Button(\"Label\") { ... }` runs code when tapped. That code usually changes @State (so UI updates).",
-        "Functions: `checkAnswer()` is a function that runs when a button is tapped. It compares answers and updates feedback/score.",
-        "Prevent double scoring: `guard !answered else { return }` stops taps from adding score twice. Try removing it to see why it matters.",
-        "Reusable UI: `AnswerButton` is a custom component to avoid repeating the same button styling twice. Change its padding to see the effect.",
-        "Preview: `#Preview { ContentView() }` lets you see UI quickly (in Xcode). In Playgrounds, just run the app.",
-        "Mini exercises (5 minutes total):",
-        "  - Change the question text to something else and run.",
-        "  - Add a third answer button and see it appear.",
-        "  - Change the feedback text to be shorter/clearer.",
-        ],
-        resources: [
-        { label: "Swift Book — The Basics (let/var, types)", url: "https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html" },
-        { label: "Apple — SwiftUI Essentials (official)", url: "https://developer.apple.com/tutorials/swiftui" },
-        { label: "SwiftUI Documentation (Views, stacks, buttons)", url: "https://developer.apple.com/documentation/swiftui" },
-        ],
-    },
-    build: {
-        microGoal: "Swift Playgrounds App: build the Day 1 1-question quiz screen (Text + 2 answer buttons + feedback + score + reset).",
-        tasks: [
-        "1) Create state variables (top of ContentView): `@State score`, `@State feedback`, `@State answered`.",
-        "2) Add UI layout: wrap everything in `VStack(spacing: 16)` and add a title `Text`.",
-        "3) Add question card: show the question `Text(question)` inside a padded container with rounded corners.",
-        "4) Add answer buttons: two buttons (`let` and `var`) that call `checkAnswer(\"let\")` / `checkAnswer(\"var\")`.",
-        "5) Add feedback line: `Text(feedback)` under the buttons.",
-        "6) Add score line: `Text(\"Score: \\(score)\")`.",
-        "7) Add Next and Reset buttons (bottom). Next resets `answered` + feedback; Reset also sets score = 0.",
-        "8) Create the logic functions: `checkAnswer`, `nextQuestion`, `resetGame`.",
-        "9) Make reusable `AnswerButton` component so both answers look consistent.",
-        "10) Run test: Tap both buttons → confirm score only increases once per round, feedback changes, Reset clears score.",
-        ],
-    },
-    log: { prompts: defaultLogPrompts },
+  day: 1,
+  phase: "Days 1–5: Swift fundamentals",
+  focus: "Swift basics",
+  learn: {
+    goal: "Follow simple steps in Swift Playgrounds + do small study tasks (notes + recall) so you actually remember View, VStack, Text, Button, @State, and functions.",
+    items: [
+      "Step 0 (Open file): Swift Playgrounds → New App → open `ContentView.swift`.",
+      "Step 1 (Study — 2 min): Read the template and label what each part is.",
+      "  - `import SwiftUI` = enables SwiftUI",
+      "  - `struct ContentView: View` = your screen",
+      "  - `var body: some View` = UI goes here",
+
+      "Step 2 (Layout): Replace template UI with `VStack(spacing: 16)`.",
+      "  - Run the app: confirm items stack vertically.",
+      "  - Mini test: change spacing `16 → 24` and run again.",
+
+      "Step 3 (Text): Add `Text(\"Swift Day 1 Quiz\")` + style with `.font(.title2)` and `.fontWeight(.bold)`.",
+      "  - Run the app: confirm title looks bigger.",
+
+      "Step 4 (Study — 3 min): Write 3 quick notes (in Notes/Notion).",
+      "  - What is a `View` in your own words?",
+      "  - What does `VStack` do?",
+      "  - What is `Text` used for?",
+
+      "Step 5 (@State): Add `@State` variables: `score`, `feedback`, `answered`.",
+      "  - Run the app: nothing changes yet (normal).",
+
+      "Step 6 (Study — 2 min): Flashcards (quick recall).",
+      "  - Card 1: `let` vs `var`?",
+      "  - Card 2: What does `@State` do?",
+      "  - Card 3: When does UI update in SwiftUI?",
+
+      "Step 7 (Show state): Add `Text(feedback)` and `Text(\"Score: \\(score)\")`.",
+      "  - Run the app: confirm feedback + score appear.",
+
+      "Step 8 (Buttons): Add 2 buttons: `Button(\"let\") { ... }` and `Button(\"var\") { ... }`.",
+      "  - Run the app: confirm buttons show.",
+
+      "Step 9 (Function): Create `checkAnswer()` and call it from both buttons.",
+      "  - Run the app: tap buttons → feedback changes.",
+
+      "Step 10 (Prevent double scoring): Add `guard !answered else { return }` inside `checkAnswer()`.",
+      "  - Test: tap correct answer many times → score increases only once.",
+
+      "Step 11 (Reset): Add Reset button + `resetGame()` to reset score/feedback/answered.",
+      "  - Run the app: Reset returns to start state.",
+
+      "Step 12 (Study — 3 min): Explain aloud (or write 2 sentences).",
+      "  - Explain how tapping a Button updates the UI using `@State`.",
+      "  - Explain what `checkAnswer()` changes and why the screen updates.",
+
+      "Mini exercises (5 minutes):",
+      "  - Change the question text and run.",
+      "  - Add a third answer button and run.",
+      "  - Make feedback shorter/clearer and run.",
+    ],
+    resources: [
+      { label: "Swift Book — The Basics (let/var, types)", url: "https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html" },
+      { label: "Apple — SwiftUI Essentials (official)", url: "https://developer.apple.com/tutorials/swiftui" },
+      { label: "SwiftUI Documentation", url: "https://developer.apple.com/documentation/swiftui" },
+    ],
   },
+  build: {
+    microGoal: "Swift Playgrounds App: build the Day 1 1-question quiz screen (Text + 2 answer buttons + feedback + score + reset).",
+    tasks: [
+      "1) Add `@State` variables: `score`, `feedback`, `answered`.",
+      "2) Build layout with `VStack(spacing: 16)` + title `Text`.",
+      "3) Show the question inside a card (padding + background + corner radius).",
+      "4) Add two answer buttons (`let`, `var`) that call `checkAnswer(\"...\")`.",
+      "5) Add `Text(feedback)` + `Text(\"Score: \\(score)\")`.",
+      "6) Add Reset button that calls `resetGame()`.",
+      "7) Test flow: correct → score increases once; wrong → score doesn’t increase; reset works.",
+      "8) (Optional study): Add 1 comment above each `@State` explaining what it controls.",
+    ],
+  },
+  log: { prompts: defaultLogPrompts },
+},
+
   {
     day: 2,
     phase: "Days 1–5: Swift fundamentals",
